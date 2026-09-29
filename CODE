@@ -1,0 +1,51 @@
+//Bristi Sharma Baral
+//Akesha Majgaiya
+// Palindrome Paradox - Week 5 (Simple Version)
+// PDA (stack) and Turing Machine (two pointers) models for palindrome checking
+
+#include <iostream>
+#include <string>
+#include <stack>
+using namespace std;
+
+// PDA model: push first half, pop and compare with second half
+bool pdaCheck(string s) {
+    stack<char> st;
+    int n = s.size();
+    int mid = n / 2;
+
+    for (int i = 0; i < mid; i++) {
+        st.push(s[i]);
+    }
+
+    int start = (n % 2 == 0) ? mid : mid + 1;
+
+    for (int i = start; i < n; i++) {
+        if (st.empty() || st.top() != s[i]) return false;
+        st.pop();
+    }
+    return st.empty();
+}
+
+// Turing Machine model: compare from both ends moving inward
+bool tmCheck(string s) {
+    int left = 0, right = s.size() - 1;
+    while (left < right) {
+        if (s[left] != s[right]) return false;
+        left++;
+        right--;
+    }
+    return true;
+}
+
+int main() {
+    string tests[] = {"abba", "aabaa", "b", "abab", "aabba"};
+
+    for (string s : tests) {
+        cout << "String: " << s << endl;
+        cout << "  PDA -> " << (pdaCheck(s) ? "Accept" : "Reject") << endl;
+        cout << "  TM  -> " << (tmCheck(s) ? "Accept" : "Reject") << endl;
+    }
+
+    return 0;
+}
